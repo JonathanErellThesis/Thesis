@@ -1,0 +1,194 @@
+model_name: LEAF
+
+best_runs:
+  "100K":
+    seed: 42
+    device: cuda
+
+    eval:
+      eval_top_ks: [2, 3, 5, 7, 10, 15]
+      relevance_thresholds: [4, 5]
+      use_clip_rmse: true
+      rmse_clip_bounds: [1.0, 5.0]
+
+    params:
+      online_inference_pred_type: per_user
+      train_on_user_residuals: false
+      sketch:
+        item_top_pct: 0.05
+        user_top_pct: 0.08
+        refresh_every: 5
+
+    model_init:
+      loss_type: residual_mse
+      embedding_size: 8
+      k: 3
+      M_u_f: 47
+      M_u_inf: 188
+      M_i_f: 269
+      M_i_inf: 572
+
+    model_hps:
+      leaf_approach: paper
+      lr: 0.001
+      lr_incremental: 0.0001
+      weight_decay: 0.00005
+      weight_decay_incremental: 0.0001
+      batch_size: 128
+      epochs_offline: 100
+      epochs_incremental: 75
+      incremental_batch_size: 128
+      patience: 8
+      incremental_patience: 10
+      use_bias: true
+      online_mode: ridge_prior
+      incremental_mode: sgd
+      incremental_freeze_mode: train_items_plus_global
+      incremental_update_sketch: false
+      neighbor_top_k: 20
+      ridge_lambda_factors: 0.001
+      ridge_lambda_user_bias: 0.001
+
+  "1M":
+    seed: 42
+    device: cuda
+
+    eval:
+      eval_top_ks: [2, 3, 5, 7, 10, 15]
+      relevance_thresholds: [4, 5]
+      use_clip_rmse: true
+      rmse_clip_bounds: [1.0, 5.0]
+
+    params:
+      online_inference_pred_type: per_user
+      train_on_user_residuals: false
+      sketch:
+        item_top_pct: 0.08
+        user_top_pct: 0.05
+        refresh_every: 10
+
+    model_init:
+      loss_type: residual_mse
+      embedding_size: 20
+      k: 4
+      M_u_f: 484
+      M_u_inf: 1932
+      M_i_f: 592
+      M_i_inf: 1261
+
+    model_hps:
+      leaf_approach: paper
+      lr: 0.005
+      lr_incremental: 0.0015
+      weight_decay: 0.00001
+      weight_decay_incremental: 0.00001
+      batch_size: 512
+      epochs_offline: 100
+      epochs_incremental: 100
+      incremental_batch_size: 256
+      patience: 7
+      incremental_patience: 7
+      use_bias: true
+      online_mode: ridge_prior
+      incremental_mode: sgd
+      incremental_freeze_mode: train_users_plus_global
+      incremental_update_sketch: train_users_plus_global
+      neighbor_top_k: 20
+      ridge_lambda_factors: 0.001
+      ridge_lambda_user_bias: 0.001
+
+  "10M":
+    seed: 42
+    device: cuda
+
+    eval:
+      eval_top_ks: [2, 3, 5, 7, 10, 15]
+      relevance_thresholds: [4, 5]
+      use_clip_rmse: true
+      rmse_clip_bounds: [1.0, 5.0]
+
+    params:
+      online_inference_pred_type: per_user
+      train_on_user_residuals: false
+      sketch:
+        item_top_pct: 0.05
+        user_top_pct: 0.05
+        refresh_every: 10
+
+    model_init:
+      loss_type: residual_mse
+      embedding_size: 32
+      k: 5
+      M_u_f: 5590
+      M_u_inf: 27951
+      M_i_f: 1069
+      M_i_inf: 5338
+
+    model_hps:
+      leaf_approach: paper
+      lr: 0.0008
+      lr_incremental: 0.001
+      weight_decay: 0.0000001
+      weight_decay_incremental: 0.0000001
+      batch_size: 4096
+      epochs_offline: 100
+      epochs_incremental: 100
+      incremental_batch_size: 2048
+      patience: 7
+      incremental_patience: 7
+      use_bias: true
+      online_mode: ridge_prior
+      incremental_mode: sgd
+      incremental_freeze_mode: full
+      incremental_update_sketch: full
+      neighbor_top_k: 20
+      ridge_lambda_factors: 0.008
+      ridge_lambda_user_bias: 0.008
+
+  "Beauty-25-10":
+    seed: 42
+    device: cuda
+
+    eval:
+      eval_top_ks: [2, 3, 5, 7, 10, 15]
+      relevance_thresholds: [4, 5]
+      use_clip_rmse: true
+      rmse_clip_bounds: [1.0, 5.0]
+
+    params:
+      online_inference_pred_type: per_user
+      train_on_user_residuals: false
+      sketch:
+        item_top_pct: 0.03
+        user_top_pct: 0.03
+        refresh_every: 5
+
+    model_init:
+      loss_type: residual_mse
+      embedding_size: 20
+      k: 3
+      M_u_f: 768
+      M_u_inf: 3072
+      M_i_f: 1536
+      M_i_inf: 12288
+
+    model_hps:
+      leaf_approach: paper
+      lr: 0.003
+      lr_incremental: 0.0005
+      weight_decay: 0.00005
+      weight_decay_incremental: 0.00005
+      batch_size: 2048
+      epochs_offline: 100
+      epochs_incremental: 100
+      incremental_batch_size: 1024
+      patience: 7
+      incremental_patience: 7
+      use_bias: true
+      online_mode: ridge_prior
+      incremental_mode: sgd
+      incremental_freeze_mode: train_items_plus_global
+      incremental_update_sketch: false
+      neighbor_top_k: 20
+      ridge_lambda_factors: 0.03
+      ridge_lambda_user_bias: 0.01

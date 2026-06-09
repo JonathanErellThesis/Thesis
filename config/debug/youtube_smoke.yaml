@@ -1,0 +1,56 @@
+model_name: Youtube
+
+best_runs:
+  "100K":
+    run_name: youtube_smoke_100K
+    seed: 42
+    device: cpu
+
+    # Debug-only data reduction. This is intentionally not used by best-run configs.
+    debug:
+      min_interactions_per_user: 5
+      max_users: 120
+
+    eval:
+      eval_top_ks: [2, 3, 5]
+      relevance_thresholds: [4, 5]
+      use_clip_rmse: true
+      rmse_clip_bounds: [1.0, 5.0]
+
+    params:
+      online_inference_pred_type: per_user
+      sketch: {}
+      train_on_user_residuals: false
+
+    model_init:
+      patience: 1
+      loss_type: residual_mse
+      incremental_freeze_mode: encoder_only_plus_bias
+
+    model_hps:
+      lr: 0.001
+      dropout: 0.0
+      emb_dim: 8
+      hidden_dims: [16]
+      patience: 1
+      activation: relu
+      batch_size: 128
+      rating_min: 1.0
+      rating_max: 5.0
+      rating_mode: centered
+      shared_table: true
+      weight_decay: 0.0
+      use_item_bias: true
+      max_history: 32
+      epochs_offline: 1
+      lr_incremental: 0.001
+      neighbor_top_k: 5
+      eval_batch_size: 128
+      use_global_bias: true
+      epochs_incremental: 1
+      incremental_patience: 1
+      history_sampling_mode: random
+      history_sampling_seed: 42
+      incremental_batch_size: 128
+      online_use_full_history: true
+      weight_decay_incremental: 0.0

@@ -1,0 +1,382 @@
+model_name: UniSketchMF
+
+best_runs:
+  "100K":
+    seed: 42
+    device: cuda
+
+    eval:
+      eval_top_ks: [2, 3, 5, 7, 10, 15]
+      relevance_thresholds: [4, 5]
+      use_clip_rmse: true
+      rmse_clip_bounds: [1.0, 5.0]
+
+    params:
+      online_inference_pred_type: per_user
+      train_on_user_residuals: false
+      sketch:
+        jl_components: 150
+        race_k: 2
+        race_d: 5
+        race_w: 20
+        race_R: 4
+        n_blocks: 2
+        n_perms: 5
+        batch_size: 8192
+        query_batch_size: 8192
+        neighbor_top_k: 10
+
+    model_init:
+      verbose: true
+      patience: 10
+      loss_type: residual_mse
+      num_epochs: 200
+      rating_col: rating
+      optimizer_type: adam
+      residual_mean_shrinkage: 5
+      side_info:
+        enabled: true
+        reference_mode: offline_frozen
+        representation:
+          type: scalar
+          source: scalar_freq
+          transform:
+            kind: standardize
+            stats_mode: offline_reference
+            clip_value: 5
+          engineered:
+            feature_set: compact_v1
+        usage:
+          predictive:
+            mode: additive_scalar
+            hidden_dims: [16]
+            dropout: 0.1
+            activation: relu
+          regularization:
+            mode: none
+          incremental_branch_policy:
+            predictive: train
+            regularization: freeze
+
+    model_hps:
+      lr: 0.015
+      reg_rate: 0.0004
+      batch_size: 128
+      embedding_size: 8
+      neighbor_top_k: 20
+      offline_scheduler:
+        name: reduce_on_plateau
+        mode: min
+        factor: 0.7
+        patience: 2
+        cooldown: 1
+        threshold: 0.00000001
+        threshold_mode: abs
+        min_lr: 0.000001
+
+    incremental_hps:
+      incremental_lr: 0.001
+      incremental_reg_rate: 0.000001
+      incremental_batch_size: 64
+      incremental_epochs: 120
+      incremental_patience: 10
+      incremental_anchor: 0
+      incremental_init_std: 0.01
+      incremental_init_mode: neighbor_mean
+      incremental_train_item_bias: false
+      incremental_train_global_bias: false
+      incremental_train_item_embedding: false
+      incremental_scheduler:
+        name: reduce_on_plateau
+        mode: min
+        factor: 0.7
+        patience: 2
+        cooldown: 1
+        threshold: 0.0000001
+        threshold_mode: abs
+        min_lr: 0.000001
+
+  "1M":
+    seed: 42
+    device: cuda
+
+    eval:
+      eval_top_ks: [2, 3, 5, 7, 10, 15]
+      relevance_thresholds: [4, 5]
+      use_clip_rmse: true
+      rmse_clip_bounds: [1.0, 5.0]
+
+    params:
+      online_inference_pred_type: per_user
+      train_on_user_residuals: false
+      sketch:
+        jl_components: 200
+        race_k: 3
+        race_d: 5
+        race_w: 150
+        race_R: 4
+        n_blocks: 2
+        n_perms: 5
+        batch_size: 8192
+        query_batch_size: 8192
+        neighbor_top_k: 10
+
+    model_init:
+      verbose: true
+      patience: 10
+      loss_type: residual_mse
+      num_epochs: 200
+      rating_col: rating
+      optimizer_type: adam
+      residual_mean_shrinkage: 5
+      side_info:
+        enabled: true
+        reference_mode: offline_frozen
+        representation:
+          type: scalar
+          source: scalar_freq
+          transform:
+            kind: standardize
+            stats_mode: offline_reference
+            clip_value: 5
+          engineered:
+            feature_set: compact_v1
+        usage:
+          predictive:
+            mode: additive_scalar
+            hidden_dims: [16, 8]
+            dropout: 0.1
+            activation: relu
+          regularization:
+            mode: none
+          incremental_branch_policy:
+            predictive: train
+            regularization: freeze
+
+    model_hps:
+      lr: 0.005
+      reg_rate: 0.00008
+      batch_size: 256
+      embedding_size: 32
+      neighbor_top_k: 20
+      offline_scheduler:
+        name: reduce_on_plateau
+        mode: min
+        factor: 0.5
+        patience: 3
+        cooldown: 1
+        threshold: 0.00000001
+        threshold_mode: abs
+        min_lr: 0.00001
+
+    incremental_hps:
+      incremental_lr: 0.0005
+      incremental_reg_rate: 0.000001
+      incremental_batch_size: 128
+      incremental_epochs: 120
+      incremental_patience: 10
+      incremental_anchor: 0
+      incremental_init_std: 0.01
+      incremental_init_mode: neighbor_mean
+      incremental_train_item_bias: false
+      incremental_train_global_bias: false
+      incremental_train_item_embedding: false
+      incremental_scheduler:
+        name: reduce_on_plateau
+        mode: min
+        factor: 0.5
+        patience: 5
+        cooldown: 1
+        threshold: 0.0000001
+        threshold_mode: abs
+        min_lr: 0.000001
+
+  "10M":
+    seed: 42
+    device: cuda
+
+    eval:
+      eval_top_ks: [2, 3, 5, 7, 10, 15]
+      relevance_thresholds: [4, 5]
+      use_clip_rmse: true
+      rmse_clip_bounds: [1.0, 5.0]
+
+    params:
+      online_inference_pred_type: per_user
+      train_on_user_residuals: false
+      sketch:
+        jl_components: 350
+        race_k: 3
+        race_d: 10
+        race_w: 100
+        race_R: 4
+        n_blocks: 2
+        n_perms: 5
+        batch_size: 8192
+        query_batch_size: 8192
+        neighbor_top_k: 10
+
+    model_init:
+      verbose: true
+      patience: 10
+      loss_type: residual_mse
+      num_epochs: 200
+      rating_col: rating
+      optimizer_type: adam
+      residual_mean_shrinkage: 5
+      side_info:
+        enabled: true
+        reference_mode: offline_frozen
+        representation:
+          type: scalar
+          source: scalar_freq
+          transform:
+            kind: standardize
+            stats_mode: offline_reference
+            clip_value: 5
+          engineered:
+            feature_set: compact_v1
+        usage:
+          predictive:
+            mode: additive_scalar
+            hidden_dims: [32, 16]
+            dropout: 0.1
+            activation: relu
+          regularization:
+            mode: none
+          incremental_branch_policy:
+            predictive: train
+            regularization: freeze
+
+    model_hps:
+      lr: 0.003
+      reg_rate: 0.000008
+      batch_size: 2048
+      embedding_size: 16
+      neighbor_top_k: 20
+      offline_scheduler:
+        name: reduce_on_plateau
+        mode: min
+        factor: 0.8
+        patience: 2
+        cooldown: 1
+        threshold: 0.00000001
+        threshold_mode: abs
+        min_lr: 0.00001
+
+    incremental_hps:
+      incremental_lr: 0.0008
+      incremental_reg_rate: 0.000001
+      incremental_batch_size: 1024
+      incremental_epochs: 120
+      incremental_patience: 10
+      incremental_anchor: 0
+      incremental_init_std: 0.01
+      incremental_init_mode: neighbor_mean
+      incremental_train_item_bias: false
+      incremental_train_global_bias: false
+      incremental_train_item_embedding: false
+      incremental_scheduler:
+        name: reduce_on_plateau
+        mode: min
+        factor: 0.7
+        patience: 2
+        cooldown: 1
+        threshold: 0.0000001
+        threshold_mode: abs
+        min_lr: 0.000001
+
+  "Beauty-25-10":
+    seed: 42
+    device: cuda
+
+    eval:
+      eval_top_ks: [2, 3, 5, 7, 10, 15]
+      relevance_thresholds: [4, 5]
+      use_clip_rmse: true
+      rmse_clip_bounds: [1.0, 5.0]
+
+    params:
+      online_inference_pred_type: per_user
+      train_on_user_residuals: false
+      sketch:
+        jl_components: 70
+        race_k: 3
+        race_d: 7
+        race_w: 128
+        race_R: 3
+        n_blocks: 2
+        n_perms: 5
+        batch_size: 8192
+        query_batch_size: 8192
+        neighbor_top_k: 10
+
+    model_init:
+      verbose: true
+      patience: 10
+      loss_type: residual_mse
+      num_epochs: 200
+      rating_col: rating
+      optimizer_type: adam
+      residual_mean_shrinkage: 5
+      side_info:
+        enabled: true
+        reference_mode: offline_frozen
+        representation:
+          type: scalar
+          source: scalar_freq
+          transform:
+            kind: standardize
+            stats_mode: offline_reference
+            clip_value: 5
+          engineered:
+            feature_set: compact_v1
+        usage:
+          predictive:
+            mode: additive_scalar
+            hidden_dims: [16]
+            dropout: 0.1
+            activation: relu
+          regularization:
+            mode: none
+          incremental_branch_policy:
+            predictive: train
+            regularization: freeze
+
+    model_hps:
+      lr: 0.005
+      reg_rate: 0.00008
+      batch_size: 1024
+      embedding_size: 8
+      neighbor_top_k: 20
+      offline_scheduler:
+        name: reduce_on_plateau
+        mode: min
+        factor: 0.5
+        patience: 2
+        cooldown: 1
+        threshold: 0.00000001
+        threshold_mode: abs
+        min_lr: 0.000001
+
+    incremental_hps:
+      incremental_lr: 0.0005
+      incremental_reg_rate: 0.000001
+      incremental_batch_size: 256
+      incremental_epochs: 120
+      incremental_patience: 12
+      incremental_anchor: 0
+      incremental_init_std: 0.01
+      incremental_init_mode: neighbor_mean
+      incremental_train_item_bias: false
+      incremental_train_global_bias: false
+      incremental_train_item_embedding: false
+      incremental_scheduler:
+        name: reduce_on_plateau
+        mode: min
+        factor: 0.7
+        patience: 5
+        cooldown: 1
+        threshold: 0.0000001
+        threshold_mode: abs
+        min_lr: 0.0000001

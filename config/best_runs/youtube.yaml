@@ -1,0 +1,50 @@
+model_name: Youtube
+
+best_runs:
+  "1M":
+    seed: 42
+    device: cuda
+
+    eval:
+      eval_top_ks: [2, 3, 5, 7, 10, 15]
+      relevance_thresholds: [4, 5]
+      use_clip_rmse: true
+      rmse_clip_bounds: [1.0, 5.0]
+
+    params:
+      online_inference_pred_type: per_user
+      sketch: {}
+      train_on_user_residuals: false
+
+    model_init:
+      patience: 10
+      loss_type: residual_mse
+      incremental_freeze_mode: encoder_only_plus_bias
+
+    model_hps:
+      lr: 0.001
+      dropout: 0.1
+      emb_dim: 64
+      hidden_dims: [128, 64]
+      patience: 7
+      activation: relu
+      batch_size: 1024
+      rating_min: 1.0
+      rating_max: 5.0
+      rating_mode: centered
+      shared_table: true
+      weight_decay: 0.00001
+      use_item_bias: true
+      max_history: 256
+      epochs_offline: 100
+      lr_incremental: 0.0001
+      neighbor_top_k: 20
+      eval_batch_size: 1024
+      use_global_bias: true
+      epochs_incremental: 100
+      incremental_patience: 7
+      history_sampling_mode: random
+      history_sampling_seed: 42
+      incremental_batch_size: 1024
+      online_use_full_history: true
+      weight_decay_incremental: 0.000005

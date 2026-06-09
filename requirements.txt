@@ -1,0 +1,10 @@
+numpy
+pandas
+pyarrow
+torch
+PyYAML
+scikit-learn
+scipy
+mmh3
+wandb
+# tensorflow is optional; only used for suppressing TF device logging in the original notebook.

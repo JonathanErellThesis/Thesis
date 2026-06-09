@@ -1,0 +1,56 @@
+model_name: LEAF
+
+best_runs:
+  "100K":
+    run_name: leaf_smoke_100K
+    seed: 42
+    device: cpu
+
+    # Debug-only data reduction. This is intentionally not used by best-run configs.
+    debug:
+      min_interactions_per_user: 5
+      max_users: 120
+
+    eval:
+      eval_top_ks: [2, 3, 5]
+      relevance_thresholds: [4, 5]
+      use_clip_rmse: true
+      rmse_clip_bounds: [1.0, 5.0]
+
+    params:
+      online_inference_pred_type: per_user
+      train_on_user_residuals: false
+      sketch:
+        item_top_pct: 0.10
+        user_top_pct: 0.10
+        refresh_every: 1
+
+    model_init:
+      loss_type: residual_mse
+      embedding_size: 4
+      k: 2
+      M_u_f: 16
+      M_u_inf: 32
+      M_i_f: 32
+      M_i_inf: 64
+
+    model_hps:
+      leaf_approach: paper
+      lr: 0.001
+      lr_incremental: 0.001
+      weight_decay: 0.0
+      weight_decay_incremental: 0.0
+      batch_size: 64
+      epochs_offline: 1
+      epochs_incremental: 1
+      incremental_batch_size: 64
+      patience: 1
+      incremental_patience: 1
+      use_bias: true
+      online_mode: ridge_prior
+      incremental_mode: sgd
+      incremental_freeze_mode: train_items_plus_global
+      incremental_update_sketch: false
+      neighbor_top_k: 5
+      ridge_lambda_factors: 0.001
+      ridge_lambda_user_bias: 0.001

@@ -1,0 +1,131 @@
+model_name: AutoRec
+
+best_runs:
+  "100K":
+    seed: 42
+    device: cuda
+
+    eval:
+      eval_top_ks: [2, 3, 5, 7, 10, 15]
+      relevance_thresholds: [4, 5]
+      use_clip_rmse: true
+      rmse_clip_bounds: [1.0, 5.0]
+
+    params:
+      online_inference_pred_type: per_user
+      sketch: {}
+      train_on_user_residuals: false
+
+    model_init:
+      loss_type: residual_mse
+
+    model_hps:
+      lr: 0.0005
+      hidden_dims: [128, 64]
+      patience: 5
+      batch_size: 64
+      weight_decay: 0.00001
+      epochs_offline: 100
+      lr_incremental: 0.0005
+      neighbor_top_k: 20
+      epochs_incremental: 100
+      incremental_patience: 5
+      incremental_batch_size: 32
+      weight_decay_incremental: 0.00001
+
+  "1M":
+    seed: 42
+    device: cuda
+
+    eval:
+      eval_top_ks: [2, 3, 5, 7, 10, 15]
+      relevance_thresholds: [4, 5]
+      use_clip_rmse: true
+      rmse_clip_bounds: [1.0, 5.0]
+
+    params:
+      online_inference_pred_type: per_user
+      sketch: {}
+      train_on_user_residuals: false
+
+    model_init:
+      loss_type: residual_mse
+
+    model_hps:
+      lr: 0.0005
+      hidden_dims: [128, 64]
+      patience: 7
+      batch_size: 256
+      weight_decay: 0.00000005
+      epochs_offline: 100
+      lr_incremental: 0.0005
+      neighbor_top_k: 20
+      epochs_incremental: 100
+      incremental_patience: 7
+      incremental_batch_size: 128
+      weight_decay_incremental: 0.00000005
+
+  "10M":
+    seed: 42
+    device: cuda
+
+    eval:
+      eval_top_ks: [2, 3, 5, 7, 10, 15]
+      relevance_thresholds: [4, 5]
+      use_clip_rmse: true
+      rmse_clip_bounds: [1.0, 5.0]
+
+    params:
+      online_inference_pred_type: per_user
+      sketch: {}
+      train_on_user_residuals: false
+
+    model_init:
+      loss_type: residual_mse
+
+    model_hps:
+      lr: 0.0001
+      hidden_dims: [512, 256]
+      patience: 7
+      batch_size: 512
+      weight_decay: 0.0
+      epochs_offline: 150
+      lr_incremental: 0.0001
+      neighbor_top_k: 20
+      epochs_incremental: 150
+      incremental_patience: 7
+      incremental_batch_size: 256
+      weight_decay_incremental: 0.0
+
+  "Beauty-25-10":
+    seed: 42
+    device: cuda
+
+    eval:
+      eval_top_ks: [2, 3, 5, 7, 10, 15]
+      relevance_thresholds: [4, 5]
+      use_clip_rmse: true
+      rmse_clip_bounds: [1.0, 5.0]
+
+    params:
+      online_inference_pred_type: per_user
+      sketch: {}
+      train_on_user_residuals: false
+
+    model_init:
+      loss_type: residual_mse
+
+    model_hps:
+      lr: 0.0005
+      activation: sigmoid
+      hidden_dims: [128, 64]
+      patience: 5
+      batch_size: 512
+      weight_decay: 0.0005
+      epochs_offline: 100
+      lr_incremental: 0.00005
+      neighbor_top_k: 20
+      epochs_incremental: 12
+      incremental_patience: 5
+      incremental_batch_size: 256
+      weight_decay_incremental: 0.0005

@@ -1,0 +1,41 @@
+model_name: AutoRec
+
+best_runs:
+  "100K":
+    run_name: autorec_smoke_100K
+    seed: 42
+    device: cpu
+
+    # Debug-only data reduction. This is intentionally not used by best-run configs.
+    debug:
+      min_interactions_per_user: 5
+      max_users: 120
+
+    eval:
+      eval_top_ks: [2, 3, 5]
+      relevance_thresholds: [4, 5]
+      use_clip_rmse: true
+      rmse_clip_bounds: [1.0, 5.0]
+
+    params:
+      online_inference_pred_type: per_user
+      sketch: {}
+      train_on_user_residuals: false
+
+    model_init:
+      loss_type: residual_mse
+
+    model_hps:
+      lr: 0.001
+      activation: sigmoid
+      hidden_dims: [16]
+      patience: 1
+      batch_size: 64
+      weight_decay: 0.0
+      epochs_offline: 1
+      lr_incremental: 0.001
+      neighbor_top_k: 5
+      epochs_incremental: 1
+      incremental_patience: 1
+      incremental_batch_size: 64
+      weight_decay_incremental: 0.0

@@ -1,0 +1,86 @@
+model_name: UniSketchMF
+
+best_runs:
+  "100K":
+    run_name: unisketchmf_smoke_100K
+    seed: 42
+    device: cpu
+
+    debug:
+      min_interactions_per_user: 5
+      max_users: 100
+
+    eval:
+      eval_top_ks: [2, 3, 5]
+      relevance_thresholds: [4, 5]
+      use_clip_rmse: true
+      rmse_clip_bounds: [1.0, 5.0]
+
+    params:
+      online_inference_pred_type: per_user
+      train_on_user_residuals: false
+      sketch:
+        jl_components: 8
+        race_k: 2
+        race_d: 2
+        race_w: 8
+        race_R: 2
+        n_blocks: 1
+        n_perms: 1
+        batch_size: 256
+        query_batch_size: 256
+        neighbor_top_k: 5
+
+    model_init:
+      verbose: true
+      patience: 1
+      loss_type: residual_mse
+      num_epochs: 1
+      rating_col: rating
+      optimizer_type: adam
+      residual_mean_shrinkage: 5
+      side_info:
+        enabled: true
+        reference_mode: offline_frozen
+        representation:
+          type: scalar
+          source: scalar_freq
+          transform:
+            kind: standardize
+            stats_mode: offline_reference
+            clip_value: 5
+          engineered:
+            feature_set: compact_v1
+        usage:
+          predictive:
+            mode: additive_scalar
+            hidden_dims: [4]
+            dropout: 0.0
+            activation: relu
+          regularization:
+            mode: none
+          incremental_branch_policy:
+            predictive: train
+            regularization: freeze
+
+    model_hps:
+      lr: 0.01
+      reg_rate: 0.0
+      batch_size: 64
+      embedding_size: 4
+      neighbor_top_k: 5
+      offline_scheduler: {}
+
+    incremental_hps:
+      incremental_lr: 0.01
+      incremental_reg_rate: 0.0
+      incremental_batch_size: 64
+      incremental_epochs: 1
+      incremental_patience: 1
+      incremental_anchor: 0
+      incremental_init_std: 0.01
+      incremental_init_mode: neighbor_mean
+      incremental_train_item_bias: false
+      incremental_train_global_bias: false
+      incremental_train_item_embedding: false
+      incremental_scheduler: {}

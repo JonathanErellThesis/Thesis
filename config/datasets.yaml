@@ -1,0 +1,17 @@
+# Dataset files are expected under datasets/ with filenames:
+#   100K_ratings.parquet
+#   1M_ratings.parquet
+#   10M_ratings.parquet
+#   Beauty-25-10_ratings.parquet
+
+datasets:
+  "100K": "datasets/100K_ratings.parquet"
+  "1M": "datasets/1M_ratings.parquet"
+  "10M": "datasets/10M_ratings.parquet"
+  "Beauty-25-10": "datasets/Beauty-25-10_ratings.parquet"
+
+splits:
+  seed: 42
+  offline: [0.8, 0.1, 0.1]
+  incremental: [0.8, 0.1, 0.1]
+  online: [0.8, 0.2]
